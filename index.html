@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zootika | Plataforma Integral de Gestión Agropecuaria</title>
+  <meta name="description" content="Zootika es la plataforma Multi-Granja y Multi-Rol para la administración integral de fincas, ganadería, avicultura, pasturas con mapas GeoJSON e inventario agropecuario.">
+  
+  <!-- Favicon Oficial Zootika -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="logo.png">
+  
+  <!-- Google Fonts: Inter y Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              primary: '#064E3B',       /* Verde Bosque Profundo */
+              'primary-dark': '#033427',
+              'primary-light': '#0b664e',
+              accent: '#10B981',        /* Verde Esmeralda */
+              'accent-hover': '#059669',
+              'accent-light': '#D1FAE5',
+              alert: '#F59E0B',         /* Ámbar */
+              'alert-light': '#FEF3C7',
+              bg: '#F9FAFB',            /* Fondo gris muy claro */
+              surface: '#FFFFFF',       /* Blanco */
+              rustic: '#78350F',        /* Tierra cálido */
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+          },
+          boxShadow: {
+            'card': '0 4px 20px -2px rgba(6, 78, 59, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.04)',
+            'card-hover': '0 12px 30px -4px rgba(6, 78, 59, 0.12), 0 4px 10px -2px rgba(0, 0, 0, 0.05)',
+            'cta': '0 10px 25px -5px rgba(16, 185, 129, 0.4)',
+            'floating': '0 12px 30px -4px rgba(37, 211, 102, 0.45)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .bg-grid-pattern {
+      background-image: radial-gradient(rgba(6, 78, 59, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    @keyframes pulse-subtle {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+    .animate-pulse-subtle {
+      animation: pulse-subtle 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="bg-brand-bg text-gray-800 font-sans antialiased selection:bg-brand-accent selection:text-white flex flex-col min-h-screen">
+
+  <!-- ========================================================================= -->
+  <!-- 1. BARRA DE NAVEGACIÓN (Navbar fija)                                     -->
+  <!-- ========================================================================= -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-brand-primary text-white shadow-md transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Logotipo Zootika -->
+        <a href="#inicio" class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-brand-accent rounded-lg p-1">
+          <div class="relative flex items-center justify-center w-12 h-12 rounded-xl bg-white shadow-md p-1 border border-white/20 group-hover:scale-105 transition-all overflow-hidden flex-shrink-0">
+            <img src="logo.png" alt="Zootika Logo" class="w-full h-full object-contain">
+          </div>
+
+          <div class="flex flex-col">
+            <span class="font-display font-extrabold text-2xl tracking-tight leading-none text-white flex items-center gap-1.5">
+              Zootika
+              <span class="w-2 h-2 rounded-full bg-brand-accent"></span>
+            </span>
+            <span class="text-[10px] tracking-widest uppercase font-semibold text-emerald-200/90 mt-0.5">Gestión Agropecuaria SaaS</span>
+          </div>
+        </a>
+
+        <!-- Enlaces de Navegación de Escritorio -->
+        <nav class="hidden lg:flex items-center space-x-1 xl:space-x-2 text-sm font-medium">
+          <a href="#inicio" class="px-3.5 py-2 rounded-md text-white/90 hover:text-white hover:bg-white/10 transition-colors">Inicio</a>
+          <a href="#modulos" class="px-3.5 py-2 rounded-md text-emerald-100/80 hover:text-white hover:bg-white/10 transition-colors">Módulos</a>
+          <a href="#roles" class="px-3.5 py-2 rounded-md text-emerald-100/80 hover:text-white hover:bg-white/10 transition-colors">Multi-Granja & Roles</a>
+          <a href="#tecnologia" class="px-3.5 py-2 rounded-md text-emerald-100/80 hover:text-white hover:bg-white/10 transition-colors">Tecnología</a>
+          <a href="#precios" class="px-3.5 py-2 rounded-md text-emerald-100/80 hover:text-white hover:bg-white/10 transition-colors">Planes</a>
+        </nav>
+
+        <!-- Botón CTA & Menú Móvil -->
+        <div class="flex items-center gap-3">
+          <a href="https://wa.me/584129412599" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold text-sm shadow-cta transition-all transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-emerald-300">
+            <span>Solicitar Demo</span>
+            <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </a>
+
+          <!-- Botón Hamburguesa Móvil -->
+          <button id="menu-btn" type="button" aria-label="Abrir menú" class="lg:hidden inline-flex items-center justify-center p-2 rounded-md text-emerald-100 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-brand-accent">
+            <svg class="h-6 w-6" id="menu-open-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg class="h-6 w-6 hidden" id="menu-close-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Menú Desplegable Móvil -->
+    <div id="mobile-menu" class="hidden lg:hidden border-t border-emerald-800/60 bg-brand-primary-dark px-4 pt-3 pb-6 space-y-2">
+      <a href="#inicio" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white/10">Inicio</a>
+      <a href="#modulos" class="block px-3 py-2 rounded-md text-base font-medium text-emerald-100/90 hover:bg-white/10">Módulos del Sistema</a>
+      <a href="#roles" class="block px-3 py-2 rounded-md text-base font-medium text-emerald-100/90 hover:bg-white/10">Multi-Granja & Roles</a>
+      <a href="#tecnologia" class="block px-3 py-2 rounded-md text-base font-medium text-emerald-100/90 hover:bg-white/10">Tecnología & GeoJSON</a>
+      <a href="#precios" class="block px-3 py-2 rounded-md text-base font-medium text-emerald-100/90 hover:bg-white/10">Planes y Precios</a>
+      <div class="pt-3">
+        <a href="https://wa.me/584129412599" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold text-center shadow-cta">
+          Solicitar Demo en Vivo
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Espaciador para la barra fija -->
+  <div class="h-20"></div>
+
+  <!-- ========================================================================= -->
+  <!-- 2. SECCIÓN HERO (Cabecera principal con información real)                 -->
+  <!-- ========================================================================= -->
+  <main class="flex-grow">
+    <section id="inicio" class="relative overflow-hidden bg-brand-bg bg-grid-pattern pt-12 pb-20 lg:pt-16 lg:pb-28">
+      
+      <!-- Mancha de luz decorativa en fondo -->
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-emerald-100/50 via-transparent to-transparent pointer-events-none -z-10 blur-3xl"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          
+          <!-- Columna Izquierda: Título y Propuesta de Valor -->
+          <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+            
+            <!-- Badge de Arquitectura Multi-Granja -->
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 shadow-sm text-xs sm:text-sm font-semibold text-brand-primary">
+              <span class="flex h-2 w-2 rounded-full bg-brand-accent animate-ping"></span>
+              <span class="text-brand-accent font-bold">Multi-Granja SaaS</span>
+              <span class="text-gray-300">|</span>
+              <span class="flex items-center gap-1 text-gray-700">
+                🌾 Sistema Multi-Rol para el Agro Latinoamericano
+              </span>
+            </div>
+
+            <!-- Título Principal -->
+            <h1 class="font-display text-4xl sm:text-5xl xl:text-6xl font-extrabold text-brand-primary tracking-tight leading-[1.15]">
+              Plataforma Integral de <span class="relative inline-block text-brand-primary">
+                Gestión Agropecuaria
+                <span class="absolute left-0 bottom-1 w-full h-3 bg-brand-accent/25 -z-10 rounded"></span>
+              </span>
+            </h1>
+
+            <!-- Subtítulo con descripción oficial -->
+            <p class="text-lg sm:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              <strong class="font-bold text-brand-primary">Zootika</strong> es la solución de software moderna para la digitalización, control y toma de decisiones en explotaciones agrícolas y ganaderas: <span class="text-brand-primary font-semibold">potreros y pasturas geoespaciales</span>, <span class="text-brand-primary font-semibold">lotes pecuarios</span>, <span class="text-brand-primary font-semibold">galpones avícolas</span> e <span class="text-brand-primary font-semibold">inventario agropecuario multialmacén</span>.
+            </p>
+
+            <!-- Botones de Acción Principales -->
+            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+              <a href="https://wa.me/584129412599" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-7 py-3.5 rounded-xl bg-brand-accent hover:bg-brand-accent-hover text-white font-bold text-base shadow-cta hover:shadow-lg transition-all transform hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-emerald-200">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+                </svg>
+                <span>Solicitar Demostración</span>
+              </a>
+
+              <a href="#modulos" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-gray-50 text-brand-primary font-semibold text-base border border-gray-200 shadow-sm hover:border-brand-primary/30 transition-all focus:outline-none focus:ring-2 focus:ring-brand-primary">
+                <svg class="w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                </svg>
+                <span>Conocer los 8 Módulos</span>
+              </a>
+            </div>
+
+            <!-- Indicadores de Confianza Tecnológica -->
+            <div class="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-5 text-xs text-gray-500">
+              <div class="flex items-center gap-1.5 font-medium">
+                <svg class="w-4 h-4 text-brand-accent" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span>Aislamiento Multi-Tenant (<code class="text-brand-primary font-mono text-[11px]">farm_id</code>)</span>
+              </div>
+              <div class="flex items-center gap-1.5 font-medium">
+                <svg class="w-4 h-4 text-brand-accent" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span>Mapas Leaflet &amp; GeoJSON</span>
+              </div>
+              <div class="flex items-center gap-1.5 font-medium">
+                <svg class="w-4 h-4 text-brand-accent" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span>Reportes PDF jsPDF-AutoTable</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Columna Derecha: Tarjeta de Vista Previa Multi-Granja -->
+          <div class="lg:col-span-5 relative">
+            
+            <div class="relative bg-white rounded-2xl border border-gray-200/90 shadow-card p-6 overflow-hidden">
+              
+              <!-- Cabecera de la simulación de la app Multi-Granja -->
+              <div class="flex items-center justify-between pb-4 border-b border-gray-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-white border border-gray-200 p-1 flex items-center justify-center shadow-sm overflow-hidden flex-shrink-0">
+                    <img src="logo.png" alt="Zootika Logo" class="w-full h-full object-contain">
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <h3 class="text-sm font-bold text-gray-900 leading-none">Hacienda San Mateo</h3>
+                      <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-brand-primary font-semibold">Granja #01</span>
+                    </div>
+                    <p class="text-[11px] text-gray-500 mt-1">Rol: Administrador de Finca (admin)</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-brand-accent border border-emerald-200">
+                    ● En línea
+                  </span>
+                </div>
+              </div>
+
+              <!-- Selector Multi-Granja Simulado -->
+              <div class="my-3 py-2 px-3 rounded-lg bg-gray-50 border border-gray-200/70 flex items-center justify-between text-xs">
+                <span class="text-gray-500 font-medium flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-brand-primary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                  Instalación Centralizada:
+                </span>
+                <span class="font-bold text-brand-primary">4 Fincas Activas</span>
+              </div>
+
+              <!-- KPIs Reales de la Plataforma -->
+              <div class="grid grid-cols-2 gap-3 mb-4">
+                
+                <!-- KPI 1: Potreros & Pasturas -->
+                <div class="p-3.5 rounded-xl bg-brand-bg border border-gray-100">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-medium text-gray-500">Potreros Mapeados</span>
+                    <span class="text-xs">🌱</span>
+                  </div>
+                  <div class="mt-1 flex items-baseline gap-2">
+                    <span class="text-xl font-extrabold text-brand-primary font-display">18 Lotes</span>
+                    <span class="text-[10px] font-bold text-brand-accent">142 ha</span>
+                  </div>
+                  <div class="text-[10px] text-gray-400 mt-0.5">Biomasa: 2,450 kg MS/ha</div>
+                </div>
+
+                <!-- KPI 2: Ganadería & Lotes -->
+                <div class="p-3.5 rounded-xl bg-brand-bg border border-gray-100">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-medium text-gray-500">Ganado en Control</span>
+                    <span class="text-xs">🐄</span>
+                  </div>
+                  <div class="mt-1 flex items-baseline gap-2">
+                    <span class="text-xl font-extrabold text-brand-primary font-display">1,420</span>
+                    <span class="text-[10px] font-bold text-brand-accent">Pesaje OK</span>
+                  </div>
+                  <div class="text-[10px] text-gray-400 mt-0.5">Curvas de engorde activas</div>
+                </div>
+
+                <!-- KPI 3: Galpones Avícolas -->
+                <div class="p-3.5 rounded-xl bg-brand-bg border border-gray-100">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-medium text-gray-500">Postura de Huevos</span>
+                    <span class="text-xs">🐔</span>
+                  </div>
+                  <div class="mt-1 flex items-baseline gap-2">
+                    <span class="text-xl font-extrabold text-brand-primary font-display">18,650</span>
+                    <span class="text-[10px] font-bold text-brand-accent">96.8%</span>
+                  </div>
+                  <div class="text-[10px] text-gray-400 mt-0.5">Galpones 01 al 04</div>
+                </div>
+
+                <!-- KPI 4: Inventario Multialmacén -->
+                <div class="p-3.5 rounded-xl bg-brand-bg border border-gray-100">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-medium text-gray-500">Almacenes &amp; Insumos</span>
+                    <span class="text-xs">📦</span>
+                  </div>
+                  <div class="mt-1 flex items-baseline gap-2">
+                    <span class="text-xl font-extrabold text-brand-primary font-display">3 Bodegas</span>
+                    <span class="text-[10px] font-bold text-brand-accent">Lotes OK</span>
+                  </div>
+                  <div class="text-[10px] text-gray-400 mt-0.5">Vencimientos monitoreados</div>
+                </div>
+
+              </div>
+
+              <!-- Bitácora de Actividades en Campo Reciente -->
+              <div class="space-y-2">
+                <div class="flex items-center justify-between text-xs font-semibold text-gray-700 px-1">
+                  <span>Labores de Campo Asignadas</span>
+                  <a href="#modulos" class="text-brand-accent hover:underline text-[11px]">Ver bitácora</a>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 rounded-lg bg-emerald-50/60 border border-emerald-100 text-xs">
+                  <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded bg-emerald-200 text-brand-primary flex items-center justify-center font-bold text-[10px]">
+                      📋
+                    </div>
+                    <div>
+                      <div class="font-semibold text-brand-primary">Aforo de Potrero #4 (Brachiaria)</div>
+                      <div class="text-[10px] text-gray-500">Encargado: Pedro Morales • Estado: Completado</div>
+                    </div>
+                  </div>
+                  <span class="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+                    Reportado
+                  </span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 rounded-lg bg-amber-50/70 border border-amber-200/80 text-xs">
+                  <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded bg-amber-200 text-amber-900 flex items-center justify-center font-bold text-[10px]">
+                      🛡️
+                    </div>
+                    <div>
+                      <div class="font-semibold text-amber-950">Bitácora de Auditoría (History)</div>
+                      <div class="text-[10px] text-amber-800">Traspaso de 50 bultos de concentrado registrado</div>
+                    </div>
+                  </div>
+                  <span class="text-[10px] font-bold text-amber-900 bg-amber-200/70 px-2 py-0.5 rounded">
+                    Auditado
+                  </span>
+                </div>
+              </div>
+
+              <!-- Resumen inferior con exportación PDF -->
+              <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
+                <span class="flex items-center gap-1.5 font-medium text-gray-700">
+                  <svg class="w-4 h-4 text-brand-accent" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+                  Reporte Ejecutivo PDF: Listo
+                </span>
+                <span class="text-[11px] font-semibold text-brand-primary">jsPDF-AutoTable</span>
+              </div>
+
+            </div>
+
+            <!-- Etiqueta Flotante Multi-Tenant -->
+            <div class="hidden sm:flex absolute -bottom-5 -left-5 bg-brand-primary text-white p-3.5 rounded-xl shadow-lg border border-white/20 items-center gap-3">
+              <div class="p-2 rounded-lg bg-brand-accent text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+                </svg>
+              </div>
+              <div class="text-left">
+                <div class="text-[11px] text-emerald-200 font-medium">Arquitectura Multi-Granja</div>
+                <div class="text-xs font-bold text-white">Aislamiento Seguro por Finca</div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- 3. SECCIÓN: LOS 8 MÓDULOS PRINCIPALES DEL SISTEMA                         -->
+    <!-- ========================================================================= -->
+    <section id="modulos" class="py-20 lg:py-24 bg-white border-t border-gray-200/80 relative">
+      <div class="absolute inset-0 bg-gradient-to-b from-brand-bg/50 to-white pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <!-- Encabezado de Sección Centrado -->
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-bold text-brand-primary uppercase tracking-wider mb-3">
+            <span class="w-1.5 h-1.5 rounded-full bg-brand-accent"></span>
+            Arquitectura Modular Completa
+          </div>
+          <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-primary tracking-tight leading-tight">
+            Los 8 Módulos Principales del Sistema
+          </h2>
+          <p class="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+            Cada granja activa únicamente los módulos que requiere según su modelo productivo: ganadería de carne y leche, avicultura de postura o agricultura tecnificada.
+          </p>
+        </div>
+
+        <!-- Cuadrícula de 8 Módulos (2 columnas en tablet, 4 en desktop) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+          
+          <!-- MÓDULO 1: Potreros y Pasturas (potreros) -->
+          <div class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-gray-200 shadow-card hover:border-brand-accent hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-2xl shadow-sm group-hover:scale-105 transition-transform">
+                  <span>🌱</span>
+                </div>
+                <code class="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-gray-100 text-gray-700">
+                  potreros
+                </code>
+              </div>
+              <h3 class="font-display text-lg font-bold text-brand-primary group-hover:text-brand-accent transition-colors">
+                Potreros y Pasturas
+              </h3>
+              <p class="mt-2 text-xs text-gray-600 leading-relaxed">
+                Delimitación geoespacial con mapas interactivos (Leaflet / GeoJSON) y cálculo exacto de áreas (ha).
+              </p>
+              <ul class="mt-4 space-y-2 text-xs text-gray-700 pt-3 border-t border-gray-100">
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Rotación:</strong> Descanso, ocupado, mantenimiento.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Aforos de biomasa:</strong> Disponibilidad forrajera en kg MS/ha.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Tratamientos agronómicos:</strong> Fertilización, encalado y control fitosanitario.</span>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-5 pt-3 border-t border-gray-100 text-[11px] font-semibold text-brand-primary flex items-center justify-between">
+              <span>GeoJSON + Leaflet</span>
+              <span>🛰️ Mapas</span>
+            </div>
+          </div>
+
+          <!-- MÓDULO 2: Lotes y Ganadería (lots) -->
+          <div class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-gray-200 shadow-card hover:border-brand-accent hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-2xl shadow-sm group-hover:scale-105 transition-transform">
+                  <span>🐄</span>
+                </div>
+                <code class="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-gray-100 text-gray-700">
+                  lots
+                </code>
+              </div>
+              <h3 class="font-display text-lg font-bold text-brand-primary group-hover:text-brand-accent transition-colors">
+                Lotes y Ganadería
+              </h3>
+              <p class="mt-2 text-xs text-gray-600 leading-relaxed">
+                Trazabilidad por lotes e individual por animal para bovinos, porcinos, ovinos y más.
+              </p>
+              <ul class="mt-4 space-y-2 text-xs text-gray-700 pt-3 border-t border-gray-100">
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Pesajes y curvas:</strong> Ganancia diaria de peso (GDP).</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Sanidad &amp; Reproducción:</strong> Vacunación y partos.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Fichas individuales:</strong> Generación en PDF por animal.</span>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-5 pt-3 border-t border-gray-100 text-[11px] font-semibold text-brand-primary flex items-center justify-between">
+              <span>Fichas Técnicas</span>
+              <span>📄 PDF Individual</span>
+            </div>
+          </div>
+
+          <!-- MÓDULO 3: Especies Pecuarias (species) -->
+          <div class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-gray-200 shadow-card hover:border-brand-accent hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-2xl shadow-sm group-hover:scale-105 transition-transform">
+                  <span>🏷️</span>
+                </div>
+                <code class="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-gray-100 text-gray-700">
+                  species
+                </code>
+              </div>
+              <h3 class="font-display text-lg font-bold text-brand-primary group-hover:text-brand-accent transition-colors">
+                Especies Pecuarias
+              </h3>
+              <p class="mt-2 text-xs text-gray-600 leading-relaxed">
+                Catálogo maestro zootécnico centralizado para clasificar y parametrizar cada animal.
+              </p>
+              <ul class="mt-4 space-y-2 text-xs text-gray-700 pt-3 border-t border-gray-100">
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Catálogo zootécnico:</strong> Especies y razas puras o cruces.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Parámetros biométricos:</strong> Estándares de peso y talla.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Tipificación productiva:</strong> Carne, leche, postura o doble fin.</span>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-5 pt-3 border-t border-gray-100 text-[11px] font-semibold text-brand-primary flex items-center justify-between">
+              <span>Catálogo Maestro</span>
+              <span>🧬 Genética & Razas</span>
+            </div>
+          </div>
+
+          <!-- MÓDULO 4: Galpones e Instalaciones (barns) -->
+          <div class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-gray-200 shadow-card hover:border-brand-accent hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-2xl shadow-sm group-hover:scale-105 transition-transform">
+                  <span>🐔</span>
+                </div>
+                <code class="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-gray-100 text-gray-700">
+                  barns
+                </code>
+              </div>
+              <h3 class="font-display text-lg font-bold text-brand-primary group-hover:text-brand-accent transition-colors">
+                Galpones &amp; Postura
+              </h3>
+              <p class="mt-2 text-xs text-gray-600 leading-relaxed">
+                Administración de naves y galpones avícolas o pecuarios con control diario de rendimiento.
+              </p>
+              <ul class="mt-4 space-y-2 text-xs text-gray-700 pt-3 border-t border-gray-100">
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Recolección diaria:</strong> Postura de huevos clasificados.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Control de mermas:</strong> Huevos rotos, sucios o no conformes.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Densidades &amp; Habitabilidad:</strong> Capacidad de aves por m².</span>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-5 pt-3 border-t border-gray-100 text-[11px] font-semibold text-brand-primary flex items-center justify-between">
+              <span>Avicultura Moderna</span>
+              <span>🥚 Postura Diaria</span>
+            </div>
+          </div>
+
+          <!-- MÓDULO 5: Inventario Agropecuario (inventory) -->
+          <div class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-gray-200 shadow-card hover:border-brand-accent hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-2xl shadow-sm group-hover:scale-105 transition-transform">
+                  <span>📦</span>
+                </div>
+                <code class="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-gray-100 text-gray-700">
+                  inventory
+                </code>
+              </div>
+              <h3 class="font-display text-lg font-bold text-brand-primary group-hover:text-brand-accent transition-colors">
+                Inventario Agropecuario
+              </h3>
+              <p class="mt-2 text-xs text-gray-600 leading-relaxed">
+                Control multialmacén de insumos agrícolas y veterinarios (alimentos, fármacos, abonos).
+              </p>
+              <ul class="mt-4 space-y-2 text-xs text-gray-700 pt-3 border-t border-gray-100">
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Lotes y vencimientos:</strong> Control estricto de fechas de expiración.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Movimientos completos:</strong> Entradas, salidas, transferencias y mermas.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Proveedores:</strong> Directorio y compras vinculadas.</span>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-5 pt-3 border-t border-gray-100 text-[11px] font-semibold text-brand-primary flex items-center justify-between">
+              <span>Multi-Almacén</span>
+              <span>🏷️ Trazabilidad</span>
+            </div>
+          </div>
+
+          <!-- MÓDULO 6: Actividades y Tareas (activities) -->
+          <div class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-gray-200 shadow-card hover:border-brand-accent hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-2xl shadow-sm group-hover:scale-105 transition-transform">
+                  <span>📋</span>
+                </div>
+                <code class="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-gray-100 text-gray-700">
+                  activities
+                </code>
+              </div>
+              <h3 class="font-display text-lg font-bold text-brand-primary group-hover:text-brand-accent transition-colors">
+                Actividades y Tareas
+              </h3>
+              <p class="mt-2 text-xs text-gray-600 leading-relaxed">
+                Planificación, asignación y seguimiento riguroso de labores de campo para el personal operativo.
+              </p>
+              <ul class="mt-4 space-y-2 text-xs text-gray-700 pt-3 border-t border-gray-100">
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Bitácora de incidencias:</strong> Reportes inmediatos desde potrero.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Estados de avance:</strong> Pendiente, en proceso y completada.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Evidencias:</strong> Registro fotográfico y observaciones técnicas.</span>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-5 pt-3 border-t border-gray-100 text-[11px] font-semibold text-brand-primary flex items-center justify-between">
+              <span>Operación de Campo</span>
+              <span>📱 Vista Móvil</span>
+            </div>
+          </div>
+
+          <!-- MÓDULO 7: Analítica y Reportes (analytics) -->
+          <div class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-gray-200 shadow-card hover:border-brand-accent hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-2xl shadow-sm group-hover:scale-105 transition-transform">
+                  <span>📊</span>
+                </div>
+                <code class="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-gray-100 text-gray-700">
+                  analytics
+                </code>
+              </div>
+              <h3 class="font-display text-lg font-bold text-brand-primary group-hover:text-brand-accent transition-colors">
+                Analítica y Reportes
+              </h3>
+              <p class="mt-2 text-xs text-gray-600 leading-relaxed">
+                Tableros con KPIs consolidados en tiempo real y exportación instantánea a informes ejecutivos.
+              </p>
+              <ul class="mt-4 space-y-2 text-xs text-gray-700 pt-3 border-t border-gray-100">
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>KPIs en tiempo real:</strong> Ocupación, producción y conversión.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>PDFs Automatizados:</strong> Motor jsPDF + jsPDF-AutoTable.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Listos para auditorías:</strong> Informes para juntas directivas y bancos.</span>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-5 pt-3 border-t border-gray-100 text-[11px] font-semibold text-brand-primary flex items-center justify-between">
+              <span>Toma de Decisiones</span>
+              <span>📈 Informes PDF</span>
+            </div>
+          </div>
+
+          <!-- MÓDULO 8: Historial y Auditoría (history) -->
+          <div class="group flex flex-col justify-between bg-white rounded-2xl p-6 border border-gray-200 shadow-card hover:border-brand-accent hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-2xl shadow-sm group-hover:scale-105 transition-transform">
+                  <span>🛡️</span>
+                </div>
+                <code class="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-gray-100 text-gray-700">
+                  history
+                </code>
+              </div>
+              <h3 class="font-display text-lg font-bold text-brand-primary group-hover:text-brand-accent transition-colors">
+                Historial y Auditoría
+              </h3>
+              <p class="mt-2 text-xs text-gray-600 leading-relaxed">
+                Registro cronológico inmutable de actividades y cambios realizados por los usuarios en cada granja.
+              </p>
+              <ul class="mt-4 space-y-2 text-xs text-gray-700 pt-3 border-t border-gray-100">
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Logs inmutables:</strong> Trazabilidad de quién, qué y cuándo editó.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Cumplimiento normativo:</strong> Respaldo legal y sanitario ante entes reguladores.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-accent font-bold">✓</span>
+                  <span><strong>Aislamiento por granja:</strong> Visibilidad estricta por tenant.</span>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-5 pt-3 border-t border-gray-100 text-[11px] font-semibold text-brand-primary flex items-center justify-between">
+              <span>Seguridad Total</span>
+              <span>🔒 Logs Seguros</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- 4. SECCIÓN: JERARQUÍA DE ROLES Y SEGURIDAD MULTI-TENANT                   -->
+    <!-- ========================================================================= -->
+    <section id="roles" class="py-20 lg:py-24 bg-brand-bg relative overflow-hidden border-t border-gray-200/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-bold text-brand-primary uppercase tracking-wider mb-3">
+            <span class="w-1.5 h-1.5 rounded-full bg-brand-accent"></span>
+            Gobernanza &amp; Seguridad
+          </div>
+          <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-primary tracking-tight">
+            Jerarquía de Roles y Seguridad Multi-Granja
+          </h2>
+          <p class="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+            Estructurado con permisos específicos para que cada colaborador cuente con las herramientas exactas para su labor diaria.
+          </p>
+        </div>
+
+        <!-- 3 Tarjetas de Roles -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+          
+          <!-- ROL 1: Superadministrador (root) -->
+          <div class="relative bg-white rounded-2xl p-8 border border-gray-200 shadow-card hover:shadow-card-hover transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-3xl">👑</span>
+                <code class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-purple-50 text-purple-700 border border-purple-200">
+                  Rol: root
+                </code>
+              </div>
+              <h3 class="font-display text-2xl font-bold text-brand-primary">
+                Superadministrador
+              </h3>
+              <p class="mt-2 text-sm text-gray-600">
+                Control global de la infraestructura multi-inquilino (Multi-Tenant SaaS).
+              </p>
+
+              <ul class="mt-6 space-y-3 text-sm text-gray-700 pt-4 border-t border-gray-100">
+                <li class="flex items-start gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Acceso global:</strong> Supervisión de todas las granjas registradas en la plataforma.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Gestión de fincas y cuentas:</strong> Creación, edición y suspensión de administradores.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Asignación modular:</strong> Activación y personalización de módulos según el plan suscrito.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Auditoría global:</strong> Monitoreo de logs consolidados y métricas del sistema.</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="mt-8 pt-4 border-t border-gray-100 text-xs font-medium text-gray-500">
+              Ideal para: Propietarios de plataformas, cooperativas o corporaciones agropecuarias.
+            </div>
+          </div>
+
+          <!-- ROL 2: Administrador de Finca (admin) -->
+          <div class="relative bg-white rounded-2xl p-8 border-2 border-brand-accent shadow-xl flex flex-col justify-between transform lg:-translate-y-2">
+            <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-brand-accent text-white px-4 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider shadow">
+              Gestor Operativo
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-4 pt-2">
+                <span class="text-3xl">👔</span>
+                <code class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                  Rol: admin
+                </code>
+              </div>
+              <h3 class="font-display text-2xl font-bold text-brand-primary">
+                Administrador de Finca
+              </h3>
+              <p class="mt-2 text-sm text-gray-600">
+                Gestión integral y exclusiva de su granja asignada con total autonomía.
+              </p>
+
+              <ul class="mt-6 space-y-3 text-sm text-gray-700 pt-4 border-t border-gray-100">
+                <li class="flex items-start gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Gestión exclusiva:</strong> Aislamiento total de sus registros, finanzas e inventarios.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Panel de KPIs:</strong> Ocupación de potreros, postura, conversión y existencias.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Control de personal:</strong> Creación de encargados y definición de módulos permitidos.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Balances y Reportes:</strong> Exportación ejecutiva en PDF para directivas.</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="mt-8 pt-4 border-t border-gray-100 text-xs font-medium text-brand-primary font-semibold">
+              Ideal para: Dueños de fincas, mayordomos generales y gerentes de producción agropecuaria.
+            </div>
+          </div>
+
+          <!-- ROL 3: Encargado de Campo (encargado) -->
+          <div class="relative bg-white rounded-2xl p-8 border border-gray-200 shadow-card hover:shadow-card-hover transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-3xl">👷</span>
+                <code class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200">
+                  Rol: encargado
+                </code>
+              </div>
+              <h3 class="font-display text-2xl font-bold text-brand-primary">
+                Encargado de Campo
+              </h3>
+              <p class="mt-2 text-sm text-gray-600">
+                Interfaz optimizada para dispositivos móviles y trabajo directo en potreros.
+              </p>
+
+              <ul class="mt-6 space-y-3 text-sm text-gray-700 pt-4 border-t border-gray-100">
+                <li class="flex items-start gap-3">
+                  <span class="w-5 h-5 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Vista "Mis Actividades":</strong> Pantalla limpia pensada para pantallas táctiles y sol directo.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-5 h-5 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Registro diario:</strong> Carga ágil de postura de huevos por clasificación y mermas.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-5 h-5 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Aforos y Pesajes:</strong> Captura de biomasa forrajera y peso animal en manga.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-5 h-5 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Consumo de Insumos:</strong> Descargo inmediato de medicinas y concentrados en bodega.</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="mt-8 pt-4 border-t border-gray-100 text-xs font-medium text-gray-500">
+              Ideal para: Supervisores de campo, vaqueros, capataces y operadores de galpón.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- 5. SECCIÓN: ARQUITECTURA TECNOLÓGICA Y REPORTES                          -->
+    <!-- ========================================================================= -->
+    <section id="tecnologia" class="py-20 lg:py-24 bg-white border-t border-gray-200/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          <div class="lg:col-span-6 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-bold text-brand-primary uppercase tracking-wider">
+              <span>⚡ Stack Moderno &amp; Robusto</span>
+            </div>
+
+            <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-brand-primary tracking-tight leading-tight">
+              Ingeniería de software de alta gama para el agro
+            </h2>
+
+            <p class="text-base text-gray-600 leading-relaxed">
+              Diseñado con tecnologías de punta para garantizar velocidad, seguridad y disponibilidad ininterrumpida tanto en oficinas centrales como en potreros remotos.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              <div class="p-4 rounded-xl bg-brand-bg border border-gray-200">
+                <div class="text-sm font-bold text-brand-primary flex items-center gap-2">
+                  <span>🗺️</span> Leaflet &amp; GeoJSON
+                </div>
+                <p class="text-xs text-gray-600 mt-1">
+                  Polígonos interactivos de potreros con cálculo satelital de hectáreas y aforos.
+                </p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-brand-bg border border-gray-200">
+                <div class="text-sm font-bold text-brand-primary flex items-center gap-2">
+                  <span>📄</span> jsPDF + AutoTable
+                </div>
+                <p class="text-xs text-gray-600 mt-1">
+                  Fichas individuales por animal y reportes ejecutivos listos para imprimir.
+                </p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-brand-bg border border-gray-200">
+                <div class="text-sm font-bold text-brand-primary flex items-center gap-2">
+                  <span>🔐</span> JWT + Scopes
+                </div>
+                <p class="text-xs text-gray-600 mt-1">
+                  Tokens criptográficos seguros y aislamiento multi-tenant por granja.
+                </p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-brand-bg border border-gray-200">
+                <div class="text-sm font-bold text-brand-primary flex items-center gap-2">
+                  <span>⚛️</span> React 19 + TypeScript
+                </div>
+                <p class="text-xs text-gray-600 mt-1">
+                  Interfaz ultrarrápida (SPA) con Vite 8 y diseño responsivo en Tailwind CSS v4.
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <span class="text-xs text-gray-500 font-semibold uppercase tracking-wider block mb-2">Desarrollado y respaldado por:</span>
+              <div class="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-brand-primary text-white text-sm font-bold shadow-sm">
+                <span>💻 Dynamic Bytes Dev</span>
+                <span class="text-emerald-300 text-xs">| Software para el Agro</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Ilustración de Mapeo Satelital y Reportes -->
+          <div class="lg:col-span-6 bg-brand-bg rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-card">
+            <div class="flex items-center justify-between pb-4 border-b border-gray-200">
+              <span class="text-xs font-bold text-brand-primary uppercase tracking-wider">
+                Delimitación Geoespacial de Potreros
+              </span>
+              <span class="text-xs bg-emerald-100 text-brand-primary px-2.5 py-0.5 rounded-full font-semibold">
+                GeoJSON v2.1
+              </span>
+            </div>
+
+            <!-- Representación gráfica de mapa de potrero -->
+            <div class="relative my-6 h-56 sm:h-64 rounded-2xl bg-gradient-to-br from-emerald-800 to-brand-primary-dark overflow-hidden flex items-center justify-center p-6 text-white border border-emerald-900 shadow-inner">
+              <!-- Rejilla cartográfica -->
+              <div class="absolute inset-0 bg-grid-pattern opacity-20"></div>
+
+              <!-- Polígono simulado de potrero -->
+              <div class="relative z-10 w-4/5 h-4/5 border-2 border-dashed border-emerald-400 bg-emerald-500/20 rounded-2xl flex flex-col items-center justify-center p-4 backdrop-blur-xs">
+                <div class="text-xs font-bold bg-white text-brand-primary px-3 py-1 rounded-full shadow-md flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-brand-accent animate-ping"></span>
+                  Potrero #04 - Pasto Estrella
+                </div>
+                <div class="mt-3 text-center">
+                  <div class="text-2xl font-extrabold font-display">14.8 Hectáreas</div>
+                  <div class="text-xs text-emerald-200 mt-0.5">Estado: Descanso (Día 18/35)</div>
+                  <div class="text-[11px] text-emerald-300 font-mono mt-1">Aforo: 2,800 kg MS/ha</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Datos técnicos del mapa -->
+            <div class="grid grid-cols-3 gap-2 text-center text-xs">
+              <div class="p-2.5 rounded-lg bg-white border border-gray-200">
+                <div class="text-gray-400 text-[10px]">Cálculo de Área</div>
+                <div class="font-bold text-brand-primary mt-0.5">Automático (ha)</div>
+              </div>
+              <div class="p-2.5 rounded-lg bg-white border border-gray-200">
+                <div class="text-gray-400 text-[10px]">Rotación Óptima</div>
+                <div class="font-bold text-brand-accent mt-0.5">Sin sobrepastoreo</div>
+              </div>
+              <div class="p-2.5 rounded-lg bg-white border border-gray-200">
+                <div class="text-gray-400 text-[10px]">Tratamiento</div>
+                <div class="font-bold text-brand-primary mt-0.5">Fertilización OK</div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- 6. SECCIÓN: PRECIOS Y PLANES                                              -->
+    <!-- ========================================================================= -->
+    <section id="precios" class="py-20 lg:py-28 bg-brand-bg relative overflow-hidden border-t border-gray-200/80">
+      <div id="demo" class="absolute -top-20"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-bold text-brand-primary uppercase tracking-wider mb-3">
+            <span class="w-1.5 h-1.5 rounded-full bg-brand-accent"></span>
+            Planes &amp; Suscripciones SaaS
+          </div>
+          <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-primary tracking-tight">
+            Planes adaptados a cada tipo de explotación
+          </h2>
+          <p class="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+            Habilita los módulos específicos para tu finca. Desde granjas individuales hasta complejos agroindustriales con múltiples predios.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch pt-6">
+          
+          <!-- PLAN 1: Finca Individual -->
+          <div class="bg-white rounded-3xl p-8 border border-gray-200 shadow-card flex flex-col justify-between hover:shadow-card-hover transition-all">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs uppercase font-extrabold tracking-wider text-gray-500">Granja Individual</span>
+                <span class="text-xl">🌱</span>
+              </div>
+              <h3 class="font-display text-2xl font-bold text-brand-primary mt-2">Plan Finca</h3>
+              <p class="text-xs text-gray-500 mt-2">Ideal para productores con una finca y operaciones de ganadería o avicultura.</p>
+              
+              <div class="mt-6 flex items-baseline gap-1">
+                <span class="text-4xl font-extrabold text-brand-primary font-display">$39</span>
+                <span class="text-sm text-gray-500">/ mes</span>
+              </div>
+              <p class="text-[11px] text-gray-400 mt-1">1 Finca independiente (Tenant único)</p>
+
+              <ul class="mt-8 space-y-3.5 text-sm text-gray-700">
+                <li class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span>Hasta <strong>500 animales</strong> trazados individualmente</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span>Módulo de <strong>Potreros y Mapas GeoJSON</strong></span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span>Hasta <strong>2 galpones</strong> con recolección de postura</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>1 Admin + 3 Encargados</strong> de campo</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span>Reportes en PDF básicos</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="mt-8">
+              <a href="https://wa.me/584129412599" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center py-3.5 px-4 rounded-xl bg-gray-50 hover:bg-gray-100 text-brand-primary font-bold text-sm border border-gray-300 shadow-sm transition-all">
+                Solicitar Plan Finca
+              </a>
+            </div>
+          </div>
+
+          <!-- PLAN 2: Multi-Granja Pro (RECOMENDADO) -->
+          <div class="relative bg-white rounded-3xl p-8 border-2 border-brand-accent shadow-xl flex flex-col justify-between transform lg:-translate-y-4 hover:shadow-2xl transition-all duration-300">
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-brand-accent text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-md flex items-center gap-1.5">
+              <span>★</span>
+              <span>Recomendado Multi-Tenant</span>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between pt-2">
+                <span class="text-xs uppercase font-extrabold tracking-wider text-brand-accent">Todos los 8 Módulos</span>
+                <span class="text-2xl">🚜</span>
+              </div>
+              <h3 class="font-display text-2xl font-bold text-brand-primary mt-2">Plan Multi-Granja Pro</h3>
+              <p class="text-xs text-gray-600 mt-2">Para empresas que gestionan varias fincas o hatos con administración centralizada.</p>
+              
+              <div class="mt-6 flex items-baseline gap-1">
+                <span class="text-5xl font-extrabold text-brand-primary font-display">$89</span>
+                <span class="text-base text-gray-500">/ mes</span>
+              </div>
+              <p class="text-[11px] text-emerald-800 font-semibold mt-1">Hasta 5 fincas independientes centralizadas</p>
+
+              <ul class="mt-8 space-y-3.5 text-sm text-gray-800">
+                <li class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Acceso Superadministrador (root)</strong> y Admins por finca</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Todos los 8 módulos activados</strong> sin restricciones</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Animales, lotes y galpones ilimitados</strong></span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Inventario multialmacén</strong> con transferencias y mermas</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Reportes ejecutivos en PDF</strong> (jsPDF-AutoTable)</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Historial y auditoría de cambios</strong> inmutable</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="mt-8">
+              <a href="https://wa.me/584129412599" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 py-4 px-6 rounded-xl bg-brand-accent hover:bg-brand-accent-hover text-white font-extrabold text-sm shadow-cta transition-all transform hover:-translate-y-0.5">
+                <span>Comenzar Prueba Gratuita (14 días)</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- PLAN 3: Agroindustrial / Corporativo -->
+          <div class="bg-white rounded-3xl p-8 border border-gray-200 shadow-card flex flex-col justify-between hover:shadow-card-hover transition-all">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs uppercase font-extrabold tracking-wider text-gray-500">Empresarial &amp; Gremios</span>
+                <span class="text-xl">🏢</span>
+              </div>
+              <h3 class="font-display text-2xl font-bold text-brand-primary mt-2">Plan Corporativo</h3>
+              <p class="text-xs text-gray-500 mt-2">Para federaciones, asociaciones ganaderas y complejos agropecuarios de gran escala.</p>
+              
+              <div class="mt-6 flex items-baseline gap-1">
+                <span class="text-4xl font-extrabold text-brand-primary font-display">A Medida</span>
+              </div>
+              <p class="text-[11px] text-gray-400 mt-1">Despliegue dedicado on-premise o en nube privada</p>
+
+              <ul class="mt-8 space-y-3.5 text-sm text-gray-700">
+                <li class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span><strong>Granjas y usuarios ilimitados</strong></span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span>Integración de API REST con ERPs contables</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span>Integración con básculas y lectores RFID</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span>Capacitación in-situ al personal operativo</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-brand-accent flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                  <span>SLA garantizado 99.9% y soporte 24/7</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="mt-8">
+              <a href="https://wa.me/584129412599" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center py-3.5 px-4 rounded-xl bg-gray-50 hover:bg-gray-100 text-brand-primary font-bold text-sm border border-gray-300 shadow-sm transition-all">
+                Contactar a Asesor Especializado
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 7. FOOTER INSTITUCIONAL COMPLETO                                         -->
+  <!-- ========================================================================= -->
+  <footer class="bg-brand-primary text-white border-t border-emerald-950 pt-16 pb-12 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 pb-12 border-b border-emerald-800/60">
+        
+        <!-- Columna 1 y 2: Identidad y Misión -->
+        <div class="lg:col-span-2 space-y-4">
+          <a href="#inicio" class="flex items-center gap-3 group">
+            <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-white shadow-md p-1 border border-white/20 group-hover:scale-105 transition-all overflow-hidden flex-shrink-0">
+              <img src="logo.png" alt="Zootika Logo" class="w-full h-full object-contain">
+            </div>
+            <div>
+              <span class="font-display font-extrabold text-2xl text-white tracking-tight flex items-center gap-1.5">
+                Zootika
+                <span class="w-2 h-2 rounded-full bg-brand-accent"></span>
+              </span>
+              <span class="text-[10px] tracking-widest uppercase font-semibold text-emerald-200/90 block">Plataforma Agropecuaria SaaS</span>
+            </div>
+          </a>
+
+          <p class="text-emerald-100/90 text-sm font-medium italic pt-1">
+            "Digitalizando y tecnificando el campo latinoamericano con arquitectura Multi-Granja y control de precisión."
+          </p>
+
+          <p class="text-xs text-emerald-200/70 leading-relaxed max-w-sm">
+            Zootika unifica en un solo sistema potreros con mapas GeoJSON, lotes pecuarios, naves avícolas de postura, inventario multialmacén y reportes ejecutivos automatizados en PDF.
+          </p>
+
+          <div class="flex items-center gap-4 pt-2 text-xs text-emerald-300">
+            <span class="inline-flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-brand-accent" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z" clip-rule="evenodd"></path></svg>
+              Cifrado JWT + Scopes
+            </span>
+            <span class="inline-flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-brand-accent" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              Auditoría Inmutable
+            </span>
+          </div>
+        </div>
+
+        <!-- Columna 3: Enlaces Rápidos -->
+        <div>
+          <h4 class="font-display font-bold text-sm text-white uppercase tracking-wider mb-4 border-b border-emerald-800 pb-2">
+            Navegación
+          </h4>
+          <ul class="space-y-2.5 text-xs text-emerald-100/80">
+            <li><a href="#inicio" class="hover:text-white hover:underline transition-colors">Inicio</a></li>
+            <li><a href="#modulos" class="hover:text-white hover:underline transition-colors">Los 8 Módulos</a></li>
+            <li><a href="#roles" class="hover:text-white hover:underline transition-colors">Jerarquía de Roles</a></li>
+            <li><a href="#tecnologia" class="hover:text-white hover:underline transition-colors">Tecnología &amp; GeoJSON</a></li>
+            <li><a href="#precios" class="hover:text-white hover:underline transition-colors">Planes &amp; Precios</a></li>
+            <li><a href="https://wa.me/584129412599" target="_blank" rel="noopener noreferrer" class="hover:text-brand-accent font-semibold transition-colors">Solicitar Demostración</a></li>
+          </ul>
+        </div>
+
+        <!-- Columna 4: Los 8 Módulos Canónicos -->
+        <div>
+          <h4 class="font-display font-bold text-sm text-white uppercase tracking-wider mb-4 border-b border-emerald-800 pb-2">
+            Módulos del Sistema
+          </h4>
+          <ul class="space-y-2 text-xs text-emerald-100/80">
+            <li><a href="#modulos" class="hover:text-white transition-colors">🌱 Potreros y Pasturas (<code>potreros</code>)</a></li>
+            <li><a href="#modulos" class="hover:text-white transition-colors">🐄 Lotes y Ganadería (<code>lots</code>)</a></li>
+            <li><a href="#modulos" class="hover:text-white transition-colors">🏷️ Especies Pecuarias (<code>species</code>)</a></li>
+            <li><a href="#modulos" class="hover:text-white transition-colors">🐔 Galpones &amp; Postura (<code>barns</code>)</a></li>
+            <li><a href="#modulos" class="hover:text-white transition-colors">📦 Inventario Agro (<code>inventory</code>)</a></li>
+            <li><a href="#modulos" class="hover:text-white transition-colors">📋 Tareas de Campo (<code>activities</code>)</a></li>
+            <li><a href="#modulos" class="hover:text-white transition-colors">📊 Analítica &amp; PDFs (<code>analytics</code>)</a></li>
+            <li><a href="#modulos" class="hover:text-white transition-colors">🛡️ Historial &amp; Logs (<code>history</code>)</a></li>
+          </ul>
+        </div>
+
+        <!-- Columna 5: Contacto Directo & Desarrollo -->
+        <div>
+          <h4 class="font-display font-bold text-sm text-white uppercase tracking-wider mb-4 border-b border-emerald-800 pb-2">
+            Atención &amp; Soporte
+          </h4>
+          <ul class="space-y-3 text-xs text-emerald-100/90">
+            <li class="flex items-start gap-2.5">
+              <span class="text-brand-accent text-sm mt-0.5">📱</span>
+              <div>
+                <span class="block text-[11px] text-emerald-300">WhatsApp Oficial:</span>
+                <a href="https://wa.me/584129412599" target="_blank" rel="noopener noreferrer" class="font-semibold text-white hover:text-brand-accent transition-colors">
+                  +58 412 9412599
+                </a>
+              </div>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="text-brand-accent text-sm mt-0.5">✉️</span>
+              <div>
+                <span class="block text-[11px] text-emerald-300">Correo Electrónico:</span>
+                <a href="mailto:soporte@zootika.com" class="font-semibold text-white hover:text-brand-accent transition-colors">
+                  soporte@zootika.com
+                </a>
+              </div>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="text-brand-accent text-sm mt-0.5">💻</span>
+              <div>
+                <span class="block text-[11px] text-emerald-300">Desarrollo:</span>
+                <span class="font-bold text-white">Dynamic Bytes Dev</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Barra Inferior de Derechos -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-emerald-200/70">
+        <p>
+          &copy; 2026 <strong>Zootika</strong>. Desarrollado con dedicación para el sector agropecuario por <strong>Dynamic Bytes Dev</strong>.
+        </p>
+        <div class="flex items-center gap-6">
+          <a href="#privacidad" class="hover:text-white transition-colors">Aviso de Privacidad</a>
+          <a href="#terminos" class="hover:text-white transition-colors">Términos de Licencia (MIT)</a>
+          <span class="text-emerald-400 font-medium">Laravel 12 • React 19 • Leaflet GeoJSON</span>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- 8. BOTÓN FLOTANTE DE WHATSAPP                                            -->
+  <!-- ========================================================================= -->
+  <div class="fixed bottom-6 right-6 z-50 flex items-center gap-3">
+    <div class="hidden lg:flex items-center bg-white text-gray-800 text-xs font-semibold py-1.5 px-3 rounded-full shadow-lg border border-gray-200 transition-opacity">
+      <span>¿Deseas una demo de Zootika?</span>
+      <div class="w-2 h-2 bg-white transform rotate-45 -mr-1 border-r border-b border-gray-200 ml-1.5"></div>
+    </div>
+
+    <a 
+      id="whatsapp-btn"
+      href="https://wa.me/584129412599" 
+      target="_blank" 
+      rel="noopener noreferrer"
+      aria-label="Contactar a Zootika por WhatsApp"
+      class="group relative flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] text-white shadow-floating hover:bg-[#20bd5a] hover:scale-110 active:scale-95 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#25D366]/40"
+    >
+      <span class="absolute inset-0 rounded-full bg-[#25D366] opacity-30 animate-ping pointer-events-none"></span>
+      <svg class="w-8 h-8 fill-current relative z-10 transition-transform group-hover:rotate-6" viewBox="0 0 24 24">
+        <path d="M12.031 2C6.495 2 2 6.495 2 12.031c0 1.954.557 3.784 1.523 5.337L2.094 22l4.786-1.42a9.98 9.98 0 005.151 1.452h.004c5.536 0 10.031-4.495 10.031-10.031S17.567 2 12.031 2zm0 18.272a8.23 8.23 0 01-4.225-1.155l-.303-.18-3.136.93.94-3.053-.197-.315a8.212 8.212 0 01-1.258-4.468c0-4.564 3.714-8.278 8.279-8.278 4.565 0 8.279 3.714 8.279 8.278 0 4.565-3.714 8.278-8.279 8.278zm4.542-6.195c-.249-.125-1.472-.726-1.7-.809-.228-.083-.394-.125-.561.125-.166.249-.644.809-.789.975-.145.166-.291.187-.54.062s-1.05-.387-2.001-1.234c-.74-.66-1.24-1.475-1.385-1.724-.145-.249-.015-.384.109-.508.112-.111.249-.291.374-.436.124-.145.166-.249.249-.415.083-.166.042-.312-.021-.436-.062-.125-.561-1.35-.769-1.85-.202-.487-.408-.42-.561-.428l-.478-.009c-.166 0-.436.062-.664.312-.228.249-.872.852-.872 2.078s.893 2.41 1.018 2.576c.125.166 1.758 2.685 4.258 3.765.595.257 1.06.41 1.423.526.598.19 1.142.163 1.572.099.48-.072 1.472-.602 1.68-1.184.208-.582.208-1.08.145-1.184-.062-.104-.228-.166-.477-.291z" />
+      </svg>
+    </a>
+  </div>
+
+  <!-- Script interactividad menú móvil -->
+  <script>
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuOpenIcon = document.getElementById('menu-open-icon');
+    const menuCloseIcon = document.getElementById('menu-close-icon');
+
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', () => {
+        const isHidden = mobileMenu.classList.toggle('hidden');
+        menuOpenIcon.classList.toggle('hidden', !isHidden);
+        menuCloseIcon.classList.toggle('hidden', isHidden);
+      });
+
+      mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+          menuOpenIcon.classList.remove('hidden');
+          menuCloseIcon.classList.add('hidden');
+        });
+      });
+    }
+  </script>
+
+</body>
+</html>
